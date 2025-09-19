@@ -6,7 +6,7 @@ export function getCliOptions() {
 
     argv.option('mode', {
         alias: 'm',
-        describe: 'write or read image',
+        describe: 'write OR read',
         type: 'string'
     })
 
@@ -22,7 +22,17 @@ export function getCliOptions() {
         type: 'string'
     });
 
-    argv.check((args) => args.image !== undefined && args.text !== undefined && (args.mode == 'write' || args.mode == 'read'));
+    argv.check((args) => {
+        if(args?.mode == 'write' && args?.image !== undefined && args?.text !== undefined) {
+            return true;
+        }
+
+        if(args?.mode == 'read' && args?.image !== undefined) {
+            return true;
+        }
+
+        return false;
+    });
 
     return {
         mode: argv.argv['mode'],
