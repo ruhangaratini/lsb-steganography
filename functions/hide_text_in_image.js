@@ -23,7 +23,7 @@ export async function hideTextInImage(path, text, finishFlag) {
         characterIndex++;
     }
 
-    await sharp(data, { raw: { width: info.width, height: info.height, channels: info.channels } }).toFormat('jpg').toFile(`${filename}_hidden.jpg`);
+    await sharp(data, { raw: { width: info.width, height: info.height, channels: info.channels } }).toFormat('png').toFile(`${filename}_hidden.png`);
 }
 
 function toOdd(number) {
