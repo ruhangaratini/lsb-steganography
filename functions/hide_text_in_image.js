@@ -5,17 +5,39 @@ export async function hideTextInImage(path, text, finishFlag) {
     const { data, info } = await sharp(path).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     let characterIndex = 0;
     let pixelRGBA = 0;
-    text = text.toLowerCase();
+    text += finishFlag;
 
-    while(characterIndex < (text.length + finishFlag.length) && pixelRGBA < data.length) {
-        const char = characterIndex < text.length ? text.charCodeAt(characterIndex): finishFlag.charCodeAt(characterIndex % text.length);
-        const alphaIndex = pixelRGBA + 3;
-
-        data[alphaIndex] = char * 2;
-
-        characterIndex++;
-        pixelRGBA += info.channels;
+    if (text.length > (data.length / 8)) {
+        console.log(`A imagem suporta apenas ${data.length / 8} caractéres`);
+        return;
     }
 
-    await sharp(data, {raw: { width: info.width , height: info.height, channels: info.channels}}).toFormat('png').toFile(`${filename}_hidden.png`);
+    while (characterIndex < text.length && pixelRGBA < data.length) {
+        const binaryChar = text.charCodeAt(characterIndex).toString(2).padStart(8, '0');
+
+        for (const binary of binaryChar) {
+            data[pixelRGBA] = binary == '1' ? toOdd(data[pixelRGBA]) : toEven(data[pixelRGBA]);
+            pixelRGBA++;
+        }
+
+        characterIndex++;
+    }
+
+    await sharp(data, { raw: { width: info.width, height: info.height, channels: info.channels } }).toFormat('jpg').toFile(`${filename}_hidden.jpg`);
+}
+
+function toOdd(number) {
+    if (number % 2 == 1) {
+        return number;
+    }
+
+    return ++number;
+}
+
+function toEven(number) {
+    if (number % 2 == 0) {
+        return number;
+    }
+
+    return --number;
 }
