@@ -11,17 +11,23 @@ Paulo, Campus Boituva
 - Não é permitido a utilização de IA durante o processo de codificação
 
 ## Instruções
-Os comandos deve ser executados a partir do diretório root do projeto
+Os comandos devem ser executados a partir do diretório root do projeto
 
 ### Dependências
 Com o Node.js instalado, execute o seguinte comando para instalar as dependências do projeto
-```npm install```
+```
+npm install
+```
 
 ### Escrita
-```node main.js -m write -i /caminho-para-imagem.jpg -t "Texto a ser inserido na imagem"```
+```
+node main.js -m write -i /caminho-para-imagem.jpg -t "Texto a ser inserido na imagem"
+```
 
 ### Leitura
-```node main.js -m read -i /caminho-para-imagem.png```
+```
+node main.js -m read -i /caminho-para-imagem.png
+```
 
 
 
